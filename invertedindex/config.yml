@@ -1,0 +1,15 @@
+db:
+    path: 'D:\test\'
+    docs_to_words: 'docs_to_words'
+    words_to_docs: 'words_to_docs'
+log:
+    path: 'D:\test\'
+    name: 'index.log'
+index:
+    search_count: 10
+server:
+    port: 50051
+    max_workers: 10
+client:
+    host: 'localhost'
+    port: 50051

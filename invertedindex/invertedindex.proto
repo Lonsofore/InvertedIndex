@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package invertedindex;
+ 
+service InvertedIndex{
+    rpc add(Text) returns (Id) {}
+    rpc search(Text) returns (IdArray) {}
+    rpc delete(Id) returns (Status) {}
+}
+
+message Id {
+    int32 id = 1;
+}
+
+message IdArray {
+    repeated int32 id = 1;
+}
+
+message Text {
+    string text = 1;
+}
+
+message Status {
+    bool status = 1;
+}
