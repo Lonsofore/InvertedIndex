@@ -1,0 +1,12 @@
+server:
+    port: 50051
+    max_workers: 10
+index:
+    search_count: 10
+db:
+    path: ''  # leave this empty to use default path
+    docs_to_words: 'docs_to_words'
+    words_to_docs: 'words_to_docs'
+log:
+    path: ''  # leave this empty to use default path
+    name: 'server.log'

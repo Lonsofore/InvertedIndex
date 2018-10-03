@@ -2,24 +2,18 @@ import grpc
 import os
 from concurrent import futures
 
-from invertedindex import CONFIG_NAME
-from .utility import get_config
+from invertedindexproto import invertedindex_pb2
+from invertedindexproto import invertedindex_pb2_grpc
+
 from .Index import Index
-from . import invertedindex_pb2
-from . import invertedindex_pb2_grpc
-
-
-CONFIG = get_config(CONFIG_NAME)
-DB_WORDS_TO_DOCS = os.path.join(CONFIG['db']['path'], CONFIG['db']['words_to_docs'])
-DB_DOCS_TO_WORDS = os.path.join(CONFIG['db']['path'], CONFIG['db']['docs_to_words'])
 
 
 # create a class to define the server functions, derived from
 # invertedindex_pb2_grpc.InvertedIndexServicer
 class InvertedIndexServicer(invertedindex_pb2_grpc.InvertedIndexServicer):
 
-    def __init__(self):
-        self.index = Index(DB_WORDS_TO_DOCS, DB_DOCS_TO_WORDS)
+    def __init__(self, words_to_docs_path, docs_to_words_path):
+        self.index = Index(words_to_docs_path, docs_to_words_path)
                 
     def add(self, request, context):
         response = invertedindex_pb2.Id()
@@ -40,12 +34,12 @@ class InvertedIndexServicer(invertedindex_pb2_grpc.InvertedIndexServicer):
         
 class Server:
 
-    def __init__(self, port, max_workers=10):
+    def __init__(self, port, max_workers, words_to_docs_path, docs_to_words_path):
         self.port = port
         self.max_workers = max_workers
         self.server = grpc.server(futures.ThreadPoolExecutor(max_workers=self.max_workers))
         invertedindex_pb2_grpc.add_InvertedIndexServicer_to_server(
-            InvertedIndexServicer(), self.server
+            InvertedIndexServicer(words_to_docs_path, docs_to_words_path), self.server
         )
         self.server.add_insecure_port('[::]:{}'.format(self.port))
         

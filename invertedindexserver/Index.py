@@ -1,14 +1,22 @@
+import os
 import shelve
 import logging
 from collections import Counter
 
-from invertedindex import CONFIG_NAME
-from .utility import get_words_set, sort_dict_by_value, get_config
+from appdirs import AppDirs
+
+from invertedindexserver import CONFIG_NAME, CONFIG_FORMAT, AUTHOR, PACKAGE_NAME
+from .utility import get_words_set, get_config
 
 
-CONFIG = get_config(CONFIG_NAME)
+DIRS = AppDirs(PACKAGE_NAME, AUTHOR)
+
+CONFIG_PATH = os.path.join(DIRS.user_config_dir, '{}.{}'.format(CONFIG_NAME, CONFIG_FORMAT))
+CONFIG = get_config(CONFIG_PATH)
+
 SEARCH_COUNT = CONFIG['index']['search_count']
-logger = logging.getLogger("index")
+
+logger = logging.getLogger("server")
 
 
 class Index:
@@ -76,6 +84,7 @@ class Index:
         logger.info('Deleted ID: {}'.format(num))
         return 0
         
+    """
     def get_all_sorted(self):
         stats = dict()
         with shelve.open(self.db_docs_to_words) as db:
@@ -84,3 +93,4 @@ class Index:
         
         sorted_by_value = sort_dict_by_value(stats, reverse=True)
         return sorted_by_value
+    """

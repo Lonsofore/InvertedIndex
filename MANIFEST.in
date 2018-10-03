@@ -1,1 +1,1 @@
-recursive-include invertedindex *.yml *.db
+global-include *.yml

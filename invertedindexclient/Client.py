@@ -1,7 +1,7 @@
 import grpc
 
-from . import invertedindex_pb2
-from . import invertedindex_pb2_grpc
+from invertedindexproto import invertedindex_pb2
+from invertedindexproto import invertedindex_pb2_grpc
  
  
 class Client(object):

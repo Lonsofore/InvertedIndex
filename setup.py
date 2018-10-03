@@ -2,7 +2,9 @@ from io import open
 from setuptools import setup, find_packages
 from os.path import join, dirname
 
-from invertedindex import __version__
+# from invertedindex import __version__
+
+__version__ = '1.0'
 
 
 with open('README.rst', 'rt', encoding='utf8') as f:
@@ -30,7 +32,8 @@ setup(
     include_package_data=True,
     entry_points={
         'console_scripts': [
-            'invertedindex = invertedindex.start:start',
+            'invertedindexserver = invertedindexserver.start:start',
+            'invertedindexclient = invertedindexclient.start:start',
         ],
     },
 )

@@ -35,11 +35,16 @@ def get_script_dir(follow_symlinks=True):
     return os.path.dirname(path)
     
     
-def get_config(name):
-    path = os.path.join(get_script_dir(),'config.yml')
-    config = yaml.safe_load(open(path, "r"))
-    return config
+def get_config(path):
+    return yaml.safe_load(open(path, "r"))
     
 
-def sort_dict_by_value(d, reverse=False):
-    return sorted(d.items(), key=lambda x: x[1], reverse=reverse)
+def get_package_name():
+    return os.path.basename(sys.argv[0])
+
+    
+def create_dir_if_not_exists(d):
+    basedir = os.path.dirname(d)
+    if not os.path.exists(basedir):
+        os.makedirs(basedir)
+    open(d, 'a').close()
