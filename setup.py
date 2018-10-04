@@ -32,7 +32,6 @@ setup(
     include_package_data=True,
     entry_points={
         'console_scripts': [
-            'invertedindex = invertedindex.start:start',
             'invertedindexserver = invertedindexserver.start:start',
             'invertedindexclient = invertedindexclient.start:start',
         ],
