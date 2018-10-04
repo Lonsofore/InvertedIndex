@@ -2,3 +2,4 @@ appdirs>=1.4.3
 ruamel.yaml>=0.15.42
 grpcio>=1.15.0
 grpcio-tools>=1.15.0
+nltk>=3.3

@@ -2,6 +2,7 @@ import os
 import shelve
 import logging
 from collections import Counter
+from threading import Lock
 
 from .config import CONFIG, WORDS_TO_DOCS_PATH, DOCS_TO_WORDS_PATH
 from .utility import get_words_set
@@ -18,6 +19,7 @@ class Index:
         self.db_words_to_docs = WORDS_TO_DOCS_PATH
         self.db_docs_to_words = DOCS_TO_WORDS_PATH
         self.docs_count = self.get_docs_count_db()
+        self.docs_count_lock = Lock()
     
     def get_docs_count(self):
         return self.docs_count
@@ -25,9 +27,14 @@ class Index:
     def get_docs_count_db(self):
         with shelve.open(self.db_words_to_docs) as db:
             return len(db)
+            
+    def add_docs_count(self):
+        with self.docs_count_lock:
+            self.docs_count += 1
     
     def add(self, line):
-        id = self.docs_count
+        id = self.get_docs_count()
+        self.add_docs_count()
         words = get_words_set(line)
         with shelve.open(self.db_words_to_docs) as db:
             db[str(id)] = words
@@ -39,7 +46,6 @@ class Index:
                     temp = set()                    
                 temp.add(id)
                 db[word] = temp
-        self.docs_count += 1
         logger.info('Added new doc. ID: {}'.format(id))
         return id
         
@@ -66,6 +72,7 @@ class Index:
         with shelve.open(self.db_words_to_docs) as db:
             try:
                 words = db[str(num)]
+                del db[str(num)]
             except Exception:
                 logger.warning('No ID: {}'.format(num))
                 return 1

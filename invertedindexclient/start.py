@@ -43,6 +43,7 @@ def start():
                     print('Unknown command')
             except RpcError as e:
                 print('* RPC error. Check your connection. *')
+                # print(e)
         elif len(arr) == 1 and arr[0] == 'exit':
             break
         else:

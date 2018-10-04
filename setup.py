@@ -2,7 +2,6 @@ from io import open
 from setuptools import setup, find_packages
 from os.path import join, dirname
 
-# from invertedindex import __version__
 
 __version__ = '1.0'
 
@@ -37,3 +36,5 @@ setup(
         ],
     },
 )
+
+import setup_nltk

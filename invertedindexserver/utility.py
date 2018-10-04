@@ -3,11 +3,12 @@ import sys
 import inspect
 
 from ruamel import yaml
+from nltk.tokenize import word_tokenize
 
 
+# old version, without nltk
+"""
 NOTSPLIT = ["'", '-']
-
-
 # split by all non-alphabet chars (except chars in array NOTSPLIT)
 def get_words_set(line):
     words = set()
@@ -23,6 +24,13 @@ def get_words_set(line):
     if word != '':
         words.add(word)
     return words
+"""
+
+
+def get_words_set(line):
+    tokens = word_tokenize(line)
+    words = [word.lower() for word in tokens if word.isalpha()]
+    return set(words)
 
     
 def get_script_dir(follow_symlinks=True):
