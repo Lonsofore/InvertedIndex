@@ -2,6 +2,7 @@ import os
 import sys
 
 from appdirs import AppDirs
+import nltk
 
 from invertedindexserver import CONFIG_NAME, CONFIG_DEFAULT, CONFIG_FORMAT, AUTHOR, PACKAGE_NAME
 from .utility import get_script_dir, create_dir_if_not_exists, get_config
@@ -18,6 +19,9 @@ if not os.path.isfile(CONFIG_PATH):
     create_dir_if_not_exists(CONFIG_PATH)
     conf = open(CONFIG_PATH_DEFAULT, 'r').read()
     conf1 = open(CONFIG_PATH, 'w').write(conf)
+    
+    # to use it just once
+    nltk.download('punkt') 
 CONFIG = get_config(CONFIG_PATH)
 
 

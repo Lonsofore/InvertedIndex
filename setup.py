@@ -36,5 +36,3 @@ setup(
         ],
     },
 )
-
-import setup_nltk
