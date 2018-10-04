@@ -26,7 +26,7 @@ if CONFIG['db']['path'] == '':
     DATA_DIR = DIRS.user_data_dir
 else:
     DATA_DIR = CONFIG['db']['path']
-create_dir_if_not_exists(DATA_DIR)
+create_dir_if_not_exists('{}/'.format(DATA_DIR))
     
 WORDS_TO_DOCS_PATH = os.path.join(DATA_DIR, CONFIG['db']['words_to_docs'])
 DOCS_TO_WORDS_PATH = os.path.join(DATA_DIR, CONFIG['db']['docs_to_words'])
