@@ -47,4 +47,4 @@ def create_dir_if_not_exists(d):
     basedir = os.path.dirname(d)
     if not os.path.exists(basedir):
         os.makedirs(basedir)
-    open(d, 'a').close()
+    # open(d, 'a').close()

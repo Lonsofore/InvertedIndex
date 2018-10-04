@@ -1,28 +1,9 @@
-import logging
-import os
-import sys
 import time
 
-from appdirs import AppDirs
 from grpc import RpcError
 
-from invertedindexclient import __version__, CONFIG_NAME, CONFIG_DEFAULT, CONFIG_FORMAT, AUTHOR, PACKAGE_NAME
-from .utility import get_script_dir, get_package_name, create_dir_if_not_exists, get_config
+from .config import CONFIG
 from .Client import Client
-
-
-# init dirs
-DIRS = AppDirs(PACKAGE_NAME, AUTHOR)
-
-
-# init config
-CONFIG_PATH_DEFAULT = os.path.join(get_script_dir(), '{}.{}'.format(CONFIG_DEFAULT, CONFIG_FORMAT))
-CONFIG_PATH = os.path.join(DIRS.user_config_dir, '{}.{}'.format(CONFIG_NAME, CONFIG_FORMAT))
-if not os.path.isfile(CONFIG_PATH):
-    create_dir_if_not_exists(CONFIG_PATH)
-    conf = open(CONFIG_PATH_DEFAULT, 'r').read()
-    conf1 = open(CONFIG_PATH, 'w').write(conf)
-CONFIG = get_config(CONFIG_PATH)
 
 
 def start():
@@ -62,6 +43,8 @@ def start():
                     print('Unknown command')
             except RpcError as e:
                 print('* RPC error. Check your connection. *')
+        elif len(arr) == 1 and arr[0] == 'exit':
+            break
         else:
             print('* Invalid command *')
     print('Exit...')

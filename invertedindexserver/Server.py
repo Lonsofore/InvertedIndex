@@ -1,6 +1,7 @@
-import grpc
 import os
 from concurrent import futures
+
+import grpc
 
 from invertedindexproto import invertedindex_pb2
 from invertedindexproto import invertedindex_pb2_grpc
@@ -12,8 +13,8 @@ from .Index import Index
 # invertedindex_pb2_grpc.InvertedIndexServicer
 class InvertedIndexServicer(invertedindex_pb2_grpc.InvertedIndexServicer):
 
-    def __init__(self, words_to_docs_path, docs_to_words_path):
-        self.index = Index(words_to_docs_path, docs_to_words_path)
+    def __init__(self):
+        self.index = Index()
                 
     def add(self, request, context):
         response = invertedindex_pb2.Id()
@@ -34,12 +35,12 @@ class InvertedIndexServicer(invertedindex_pb2_grpc.InvertedIndexServicer):
         
 class Server:
 
-    def __init__(self, port, max_workers, words_to_docs_path, docs_to_words_path):
+    def __init__(self, port, max_workers):
         self.port = port
         self.max_workers = max_workers
         self.server = grpc.server(futures.ThreadPoolExecutor(max_workers=self.max_workers))
         invertedindex_pb2_grpc.add_InvertedIndexServicer_to_server(
-            InvertedIndexServicer(words_to_docs_path, docs_to_words_path), self.server
+            InvertedIndexServicer(), self.server
         )
         self.server.add_insecure_port('[::]:{}'.format(self.port))
         

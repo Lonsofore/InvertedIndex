@@ -3,16 +3,9 @@ import shelve
 import logging
 from collections import Counter
 
-from appdirs import AppDirs
+from .config import CONFIG, WORDS_TO_DOCS_PATH, DOCS_TO_WORDS_PATH
+from .utility import get_words_set
 
-from invertedindexserver import CONFIG_NAME, CONFIG_FORMAT, AUTHOR, PACKAGE_NAME
-from .utility import get_words_set, get_config
-
-
-DIRS = AppDirs(PACKAGE_NAME, AUTHOR)
-
-CONFIG_PATH = os.path.join(DIRS.user_config_dir, '{}.{}'.format(CONFIG_NAME, CONFIG_FORMAT))
-CONFIG = get_config(CONFIG_PATH)
 
 SEARCH_COUNT = CONFIG['index']['search_count']
 
@@ -21,9 +14,9 @@ logger = logging.getLogger("server")
 
 class Index:
 
-    def __init__(self, db_words_to_docs, db_docs_to_words):
-        self.db_words_to_docs = db_words_to_docs
-        self.db_docs_to_words = db_docs_to_words
+    def __init__(self):
+        self.db_words_to_docs = WORDS_TO_DOCS_PATH
+        self.db_docs_to_words = DOCS_TO_WORDS_PATH
         self.docs_count = self.get_docs_count_db()
     
     def get_docs_count(self):
@@ -69,28 +62,20 @@ class Index:
         return ids
                 
     def delete(self, num):
-        words = dict()
+        words = set()
         with shelve.open(self.db_words_to_docs) as db:
             try:
                 words = db[str(num)]
             except Exception:
                 logger.warning('No ID: {}'.format(num))
                 return 1
+        logger.debug('Delete num {} from these words: {}'.format(num, words))
         with shelve.open(self.db_docs_to_words) as db:
             for word in words:
-                db[word].remove(num)
-                if len(db[word]) == 0:
-                    db.remove(word)
+                temp = db[word]
+                temp.remove(num)
+                db[word] = temp
+                # if len(db[word]) == 0:
+                #    db.remove(word)
         logger.info('Deleted ID: {}'.format(num))
         return 0
-        
-    """
-    def get_all_sorted(self):
-        stats = dict()
-        with shelve.open(self.db_docs_to_words) as db:
-            for key in db.keys():
-                stats[key] = len(db[key])
-        
-        sorted_by_value = sort_dict_by_value(stats, reverse=True)
-        return sorted_by_value
-    """
