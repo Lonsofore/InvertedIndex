@@ -73,6 +73,12 @@ Using Docker:
 replace *port_out* and *port_in* on your ports
 
 
+If you want to use it on the same machine - replace "-p *port_out*:*port_in*" to "--network=host":
+
+* Server:  docker run -it --network="host" invertedindex invertedindexserver
+* Client:  docker run -it --network="host" invertedindex invertedindexclient
+
+
 License
 -------
 
