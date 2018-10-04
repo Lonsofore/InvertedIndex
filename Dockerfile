@@ -1,4 +1,4 @@
-FROM alpine:3.8
+FROM python:3.7-slim
 
 WORKDIR /app
 
@@ -15,4 +15,4 @@ RUN python3 setup.py install
 EXPOSE  50051
 
 # Run
-CMD invertedindexserer
+CMD invertedindexserver
