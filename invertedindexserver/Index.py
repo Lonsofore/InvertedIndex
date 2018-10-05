@@ -31,10 +31,10 @@ class Index:
     def add_docs_count(self):
         with self.docs_count_lock:
             self.docs_count += 1
+            return self.docs_count
     
     def add(self, line):
-        id = self.get_docs_count()
-        self.add_docs_count()
+        id = self.add_docs_count()
         words = get_words_set(line)
         with shelve.open(self.db_words_to_docs) as db:
             db[str(id)] = words
@@ -72,7 +72,7 @@ class Index:
         with shelve.open(self.db_words_to_docs) as db:
             try:
                 words = db[str(num)]
-                del db[str(num)]
+                db[str(num)] = set()
             except Exception:
                 logger.warning('No ID: {}'.format(num))
                 return 1
@@ -82,7 +82,5 @@ class Index:
                 temp = db[word]
                 temp.remove(num)
                 db[word] = temp
-                # if len(db[word]) == 0:
-                #    db.remove(word)
         logger.info('Deleted ID: {}'.format(num))
         return 0
