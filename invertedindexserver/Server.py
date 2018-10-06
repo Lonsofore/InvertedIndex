@@ -12,24 +12,25 @@ from .Index import Index
 # create a class to define the server functions, derived from
 # invertedindex_pb2_grpc.InvertedIndexServicer
 class InvertedIndexServicer(invertedindex_pb2_grpc.InvertedIndexServicer):
-
+    index = Index()
+    
     def __init__(self):
-        self.index = Index()
+        pass
                 
     def add(self, request, context):
         response = invertedindex_pb2.Id()
-        response.id = self.index.add(request.text)
+        response.id = index.add(request.text)
         return response
         
     def search(self, request, context):
         response = invertedindex_pb2.IdArray()
-        result = self.index.search(request.text)
+        result = index.search(request.text)
         response.id[:] = result
         return response
         
     def delete(self, request, context):
         response = invertedindex_pb2.Status()
-        response.status = self.index.delete(request.id)
+        response.status = index.delete(request.id)
         return response
 
         
